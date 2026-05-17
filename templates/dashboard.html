@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h2>Welcome, {{ current_user.username }}! 💪</h2>
+    <p>Ready to log your workout today?</p>
+    <a href="/logout" class="btn">Logout</a>
+</div>
+{% endblock %}
