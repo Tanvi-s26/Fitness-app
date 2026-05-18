@@ -8,12 +8,19 @@
 </head>
 <body>
 
-    <nav>
-        <h1>🏋️ FitTrack</h1>
+<nav>
+    <h1>🏋️ FitTrack</h1>
+    {% if current_user.is_authenticated %}
+        <a href="/dashboard">Dashboard</a>
+        <a href="/log-workout">Log Workout</a>
+        <a href="/users">Find Friends</a>
+        <a href="/logout">Logout</a>
+    {% else %}
         <a href="/">Home</a>
         <a href="/register">Register</a>
         <a href="/login">Login</a>
-    </nav>
+    {% endif %}
+</nav>
 
     <main>
         {% block content %}

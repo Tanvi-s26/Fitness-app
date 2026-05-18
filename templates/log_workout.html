@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Log Workout{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Log a Workout 🏃</h2>
+
+    {% if success %}
+    <p class="success">{{ success }}</p>
+    {% endif %}
+
+    <form method="POST" action="/log-workout">
+        <select name="workout_type" required>
+            <option value="">Select workout type</option>
+            <option value="Running">Running</option>
+            <option value="Cycling">Cycling</option>
+            <option value="Swimming">Swimming</option>
+            <option value="Weight Training">Weight Training</option>
+            <option value="Yoga">Yoga</option>
+            <option value="HIIT">HIIT</option>
+            <option value="Walking">Walking</option>
+        </select>
+        <input type="number" name="duration" placeholder="Duration (minutes)" required>
+        <input type="number" name="calories" placeholder="Calories burned" required>
+        <textarea name="notes" placeholder="Any notes? (optional)" rows="3"></textarea>
+        <button type="submit" class="btn">Log Workout</button>
+    </form>
+</div>
+{% endblock %}

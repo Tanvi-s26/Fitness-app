@@ -3,9 +3,63 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="hero">
+<div class="dashboard">
     <h2>Welcome, {{ current_user.username }}! 💪</h2>
-    <p>Ready to log your workout today?</p>
-    <a href="/logout" class="btn">Logout</a>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <h3>{{ total_workouts }}</h3>
+            <p>Total Workouts</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ total_calories }}</h3>
+            <p>Calories Burned</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ total_minutes }}</h3>
+            <p>Minutes Trained</p>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+
+        <div class="section">
+            <h3>Your Recent Workouts</h3>
+            <a href="/log-workout" class="btn" style="margin-bottom:16px; display:inline-block;">+ Log Workout</a>
+            {% if workouts %}
+                {% for workout in workouts %}
+                <div class="workout-card">
+                    <strong>{{ workout.workout_type }}</strong>
+                    <span>{{ workout.duration }} mins</span>
+                    <span>{{ workout.calories }} kcal</span>
+                    <small>{{ workout.created_at.strftime('%d %b %Y') }}</small>
+                    {% if workout.notes %}
+                    <p>{{ workout.notes }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty">No workouts yet. Log your first one!</p>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h3>Friends' Activity 👥</h3>
+            {% if feed %}
+                {% for item in feed %}
+                <div class="workout-card feed-card">
+                    <strong>{{ item.user.username }}</strong>
+                    <span>{{ item.workout_type }}</span>
+                    <span>{{ item.duration }} mins</span>
+                    <small>{{ item.created_at.strftime('%d %b %Y') }}</small>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty">Follow friends to see their activity!</p>
+            {% endif %}
+            <a href="/users" class="btn-outline">Find Friends</a>
+        </div>
+
+    </div>
 </div>
 {% endblock %}
