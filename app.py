@@ -23,8 +23,22 @@ login_manager.login_view = "login"
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-with app.app_context():
-    db.create_all()
+import time
+
+def create_tables():
+    retries = 5
+    while retries:
+        try:
+            with app.app_context():
+                db.create_all()
+            print("Database tables created!")
+            break
+        except Exception as e:
+            retries -= 1
+            print(f"Database not ready, retrying... ({retries} left)")
+            time.sleep(3)
+
+create_tables()
 
 @app.route("/")
 def home():
