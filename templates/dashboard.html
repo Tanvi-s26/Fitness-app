@@ -1,65 +1,89 @@
 {% extends "base.html" %}
-
 {% block title %}Dashboard{% endblock %}
-
 {% block content %}
-<div class="dashboard">
-    <h2>Welcome, {{ current_user.username }}! 💪</h2>
 
-    <div class="stats-row">
-        <div class="stat-card">
-            <h3>{{ total_workouts }}</h3>
-            <p>Total Workouts</p>
-        </div>
-        <div class="stat-card">
-            <h3>{{ total_calories }}</h3>
-            <p>Calories Burned</p>
-        </div>
-        <div class="stat-card">
-            <h3>{{ total_minutes }}</h3>
-            <p>Minutes Trained</p>
-        </div>
+<div class="dash-welcome">
+  <div>
+    <h2>Hey, <span>{{ current_user.username }}</span> 👋</h2>
+    <p>Here's your fitness overview</p>
+  </div>
+  <a href="/log-workout" class="btn">+ Log Workout</a>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <span class="stat-icon">🏋️</span>
+    <h3>{{ total_workouts }}</h3>
+    <p>Total Workouts</p>
+  </div>
+  <div class="stat-card">
+    <span class="stat-icon">🔥</span>
+    <h3>{{ total_calories }}</h3>
+    <p>Calories Burned</p>
+  </div>
+  <div class="stat-card">
+    <span class="stat-icon">⏱️</span>
+    <h3>{{ total_minutes }}</h3>
+    <p>Minutes Trained</p>
+  </div>
+</div>
+
+<div class="dashboard-grid">
+  <div class="section">
+    <div class="section-header">
+      <h3>Your Workouts</h3>
+      <a href="/log-workout" class="btn-outline">+ Add</a>
     </div>
-
-    <div class="dashboard-grid">
-
-        <div class="section">
-            <h3>Your Recent Workouts</h3>
-            <a href="/log-workout" class="btn" style="margin-bottom:16px; display:inline-block;">+ Log Workout</a>
-            {% if workouts %}
-                {% for workout in workouts %}
-                <div class="workout-card">
-                    <strong>{{ workout.workout_type }}</strong>
-                    <span>{{ workout.duration }} mins</span>
-                    <span>{{ workout.calories }} kcal</span>
-                    <small>{{ workout.created_at.strftime('%d %b %Y') }}</small>
-                    {% if workout.notes %}
-                    <p>{{ workout.notes }}</p>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            {% else %}
-                <p class="empty">No workouts yet. Log your first one!</p>
-            {% endif %}
+    {% if workouts %}
+      {% for w in workouts %}
+      <div class="workout-card">
+        <div class="workout-icon">
+          {% if w.workout_type == 'Running' %}🏃
+          {% elif w.workout_type == 'Cycling' %}🚴
+          {% elif w.workout_type == 'Swimming' %}🏊
+          {% elif w.workout_type == 'Weight Training' %}🏋️
+          {% elif w.workout_type == 'Yoga' %}🧘
+          {% elif w.workout_type == 'HIIT' %}⚡
+          {% else %}🚶{% endif %}
         </div>
-
-        <div class="section">
-            <h3>Friends' Activity 👥</h3>
-            {% if feed %}
-                {% for item in feed %}
-                <div class="workout-card feed-card">
-                    <strong>{{ item.user.username }}</strong>
-                    <span>{{ item.workout_type }}</span>
-                    <span>{{ item.duration }} mins</span>
-                    <small>{{ item.created_at.strftime('%d %b %Y') }}</small>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p class="empty">Follow friends to see their activity!</p>
-            {% endif %}
-            <a href="/users" class="btn-outline">Find Friends</a>
+        <div class="workout-info">
+          <div class="workout-type">{{ w.workout_type }}</div>
+          <div class="workout-meta">{{ w.duration }} mins &nbsp;·&nbsp; {{ w.calories }} kcal</div>
         </div>
+        <div class="workout-date">{{ w.created_at.strftime('%d %b') }}</div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">
+        <span>🏁</span>
+        <p>No workouts yet. Log your first one!</p>
+      </div>
+    {% endif %}
+  </div>
 
+  <div class="section">
+    <div class="section-header">
+      <h3>Friends' Activity</h3>
+      <a href="/users" class="btn-outline">Find Friends</a>
     </div>
+    {% if feed %}
+      {% for item in feed %}
+      <div class="workout-card feed-card">
+        <div class="workout-icon">👥</div>
+        <div class="workout-info">
+          <div class="feed-username">{{ item.user.username }}</div>
+          <div class="workout-type">{{ item.workout_type }}</div>
+          <div class="workout-meta">{{ item.duration }} mins &nbsp;·&nbsp; {{ item.calories }} kcal</div>
+        </div>
+        <div class="workout-date">{{ item.created_at.strftime('%d %b') }}</div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">
+        <span>👥</span>
+        <p>Follow friends to see their activity!</p>
+      </div>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}

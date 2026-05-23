@@ -1,16 +1,22 @@
 {% extends "base.html" %}
-
 {% block title %}Find Friends{% endblock %}
-
 {% block content %}
-<div class="section" style="max-width:600px; margin: 40px auto;">
-    <h2>Find Friends 👥</h2>
+<div style="max-width:600px; margin: 0 auto;">
+  <div style="margin-bottom:24px;">
+    <h2 style="font-size:1.8rem; font-weight:800; color:white;">Find Friends 👥</h2>
+    <p style="color:var(--text-muted); margin-top:4px;">Follow other FitTrack users</p>
+  </div>
+  <div class="section">
     {% for user in users %}
     <div class="user-card">
-        <strong>{{ user.username }}</strong>
-        <span>{{ user.email }}</span>
-        <a href="/follow/{{ user.id }}" class="btn-outline">Follow</a>
+      <div class="avatar">{{ user.username[0].upper() }}</div>
+      <div class="user-info">
+        <div class="user-name">{{ user.username }}</div>
+        <div class="user-email">{{ user.email }}</div>
+      </div>
+      <a href="/follow/{{ user.id }}" class="btn-outline">Follow</a>
     </div>
     {% endfor %}
+  </div>
 </div>
 {% endblock %}
